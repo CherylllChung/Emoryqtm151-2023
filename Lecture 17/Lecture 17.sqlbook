@@ -102,6 +102,17 @@ Try it yourself!
 
 
 
+-- SQLBook: Code
+-- Create empty TABLE called "drivers"
+-- This example has five arguments separated by a comma
+-- that contain the "column_name" and "column_type", respectively
+
+CREATE TABLE drivers(
+    driver_id int,
+    driver_name varchar(30),
+    nationality varchar(15),
+    victories int
+);    
 -- SQLBook: Markup
 # <span style="color:darkblue"> II. Dataset Operations </span>
 
