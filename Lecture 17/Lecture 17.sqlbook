@@ -99,8 +99,8 @@ Try it yourself!
 -- Select a new driver id (needs to be unique)
 -- Make sure to deparate arguments by a semicolon!
 
-
-
+INSERT INTO drivers  VALUES (5, 'Cheryl Chung','China',818);
+INSERT INTO drivers  VALUES (6, 'Austin Watkinson','US',420);
 
 -- SQLBook: Code
 -- Create empty TABLE called "drivers"
@@ -132,6 +132,7 @@ Extract all columns from table
 -- SQLBook: Code
 -- The symbol "*" is a shorthand for "all variables"
 SELECT * FROM drivers;
+--select all from drivers 
 -- SQLBook: Markup
 <font size = "5">
 
@@ -143,11 +144,11 @@ WHERE nationality = 'German';
 
 -- Evalute OR conditions
 SELECT * FROM drivers
-WHERE (nationality = 'German') OR (nationality = 'British');
+WHERE (nationality = 'China') OR (nationality = 'British');
 
 -- Evaluate AND conditions
 SELECT * FROM drivers
-WHERE (nationality = 'German') AND (driver_id = 2);
+WHERE (nationality = 'US') AND (driver_id = 2);
 
 -- SQLBook: Markup
 <font size="5"> 
@@ -176,7 +177,10 @@ ORDER BY victories ASC;
 
 -- Order in descending order of victories
 SELECT * FROM drivers
+
 ORDER BY victories DESC;
+SELECT * FROM drivers
+ORDER BY driver_id ;
 -- SQLBook: Markup
 <font size = "5">
 
@@ -199,9 +203,8 @@ with more than 60 victories
 -- SQLBook: Code
 -- Write your own code!
 
-
-
-
+SELECT nationality, driver_id FROM drivers
+where victories >= 60 ;
 
 -- SQLBook: Markup
 # <span style="color:darkblue"> III. Groupby + Chaining </span>
