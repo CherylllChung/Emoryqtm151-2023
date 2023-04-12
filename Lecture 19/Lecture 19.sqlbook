@@ -28,7 +28,16 @@ Data extraction
 -- All of the data extraction start with a SELECT ... FROM
 -- which has the following form
 -- The "*" is used to denote all the columns 
+SELECT * FROM drivers
+WHERE nationality = 'German';
 
+-- Evalute OR conditions
+SELECT * FROM drivers
+WHERE (nationality = 'China') OR (nationality = 'British');
+
+-- Evaluate AND conditions
+SELECT * FROM drivers
+WHERE (nationality = 'US') AND (driver_id = 2);
 --             SELECT * FROM datasetname
 --             SELECT colname1, colname2 FROM datasetname
 -- SQLBook: Markup
@@ -51,15 +60,25 @@ Import data
 
 -- (i) Delete table:
 --      DROP IF EXISTS table_name```
-
+DROP TABLE IF EXISTS bills_actions;
 -- (ii) Create headers of new table:
 --      CREATE TABLE table_name ( ... ) ```
-
+CREATE TABLE bills_actions(
+        "Congress"  int NOT NULL,
+        bill_number int ,
+        bill_type   varchar(30),
+        action      varchar(1000),
+        main_action varchar(50),
+        object      varchar(30),
+        member_id   int
+);
 -- (iii) Import rows from CSV:
 --       COPY table_name
 --       FROM 'pathname'
 --       WITH (DELIMITER ',', FORMAT csv, HEADER MATCH);
-
+COPY us_congress_members
+FROM '/private/tmp/data copy/us_congress_members.csv'
+WITH (DELIMITER ',', FORMAT csv, HEADER MATCH)
 -- SQLBook: Markup
 ## <span style="color:darkblue"> III. Quiz Structure </span>
 
@@ -88,6 +107,16 @@ The quiz will use the Formula 1 dataset
 with column names and data types
 - You will need to use the SQL command ``` CREATE TABLE ```
 
+-- SQLBook: Code
+CREATE TABLE bills_actions(
+        "Congress"  int NOT NULL,
+        bill_number int ,
+        bill_type   varchar(30),
+        action      varchar(1000),
+        main_action varchar(50),
+        object      varchar(30),
+        member_id   int
+);
 -- SQLBook: Markup
 
 <font size = "5">
@@ -101,6 +130,12 @@ from ".csv" files using the command <br>
 - Display the dataset using ``` SELECT * FROM .... ```
 - See Lecture 18 for more details
 
+-- SQLBook: Code
+COPY us_congress_members
+FROM '/private/tmp/data copy/us_congress_members.csv'
+WITH (DELIMITER ',', FORMAT csv, HEADER MATCH)
+
+SELECT * FROM 
 -- SQLBook: Markup
 <font size = "5">
 
@@ -108,8 +143,12 @@ from ".csv" files using the command <br>
 
 - Subset one of the above datasets using ``` WHERE ```
 - Then sort the datasets in ascending or descending order 
+-- SQLBook: Code
+SELECT * FROM drivers
+WHERE nationality = 'German'
+ORDER BY victories ASC;
 -- SQLBook: Markup
-<font size = "5">
+<font size = "5">   
 
 (d) Groupby + Aggregate
 
@@ -120,6 +159,20 @@ from ".csv" files using the command <br>
 
 
 HINT: See the end of lectures 17
+-- SQLBook: Code
+COUNT(*) AS num_members       
+FROM us_congress_members;
+-- or
+SELECT COUNT(DISTINCT party_name) AS num_distinct_parties,
+       COUNT(*) AS num_members       
+FROM us_congress_members
+
+SELECT COUNT(*) AS num_rows,
+       SUM(victories) AS sum_victories,
+       AVG(victories) AS mean_victories,
+       MIN(victories) AS min_victories,
+       MAX(victories) AS max_victories
+FROM drivers
 -- SQLBook: Markup
 <font size = "5">
 
@@ -129,6 +182,14 @@ HINT: See the end of lectures 17
 - Then sort using ``` ORDER BY ```
 
 HINT: See the end of lectures 17 and 18
+-- SQLBook: Code
+SELECT column_name, 
+COUNT(*) AS count, 
+    AVG(column_name) AS avg, 
+    SUM(column_name) AS total
+FROM table_name
+GROUP BY column_name
+ORDER BY total DESC;
 -- SQLBook: Markup
 <font size = "5">
 
@@ -136,3 +197,13 @@ HINT: See the end of lectures 17 and 18
 
 - Compute an aggregate statistict using ```GROUP BY```
 - Subset one of the above datasets using ``` HAVING ```
+-- SQLBook: Markup
+SELECT nationality,
+       SUM(victories) AS sum_victories,
+       AVG(victories) AS mean_victories,
+       MIN(victories) AS min_victories,
+       MAX(victories) AS max_victories
+FROM drivers
+WHERE nationality = 'German'
+GROUP BY nationality
+HAVING SUM(victories) > 50;
